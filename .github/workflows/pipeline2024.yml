@@ -1,0 +1,89 @@
+name: CI/CD Pipeline (Assemble, Test, Publish, and Notify the teacher)
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+    assemble:
+        runs-on: ubuntu-latest
+        env:
+            GITHUB_LOGIN: ${{ github.actor }}
+            GITHUB_PACKAGES: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+        steps:
+        -   name: This step creates a copy of the repository for the workflow to run on
+            uses: actions/checkout@v3
+        -   name: This step sets up java on the machine running this workflow
+            uses: actions/setup-java@v3
+            with:
+                distribution: 'temurin'
+                java-version: '16'
+            
+        -   name: Assemble the project / creating a jar file
+            run: |
+                chmod +x gradlew        
+                ./gradlew assemble
+        -   name: Author of triggering commit
+            run: |
+                echo "The author is ${{ github.event.head_commit.author.name }}"
+
+    test:
+        runs-on: ubuntu-latest
+        needs: assemble
+        env:
+            GITHUB_LOGIN: ${{ github.actor }}
+            GITHUB_PACKAGES: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+        steps:
+        -   name: This step creates a copy of the repository for the workflow to run on
+            uses: actions/checkout@v3
+        -   name: This step sets up java on the machine running this workflow
+            uses: actions/setup-java@v3
+            with:
+                distribution: 'temurin'
+                java-version: '16'
+            
+        -   name: Testing the code
+            run: |
+                chmod +x gradlew        
+                ./gradlew test
+        -   name: Author of triggering commit
+            run: |
+                echo "The author is ${{ github.event.head_commit.author.name }}"
+
+    publish:
+        runs-on: ubuntu-latest
+        needs: test
+        env:
+            GITHUB_LOGIN: ${{ github.actor }}
+            GITHUB_PACKAGES: ${{ secrets.PUBLISHING_TOKEN }}
+            GITHUB_OAUTH: ${{ secrets.PUBLISHING_TOKEN }}
+        steps:
+        -   name: This step creates a copy of the repository for the workflow to run on
+            uses: actions/checkout@v3
+        -   name: This step sets up java on the machine running this workflow
+            uses: actions/setup-java@v3
+            with:
+                distribution: 'temurin'
+                java-version: '16'
+            
+        -   name: Publishing the project
+            run: |
+                chmod +x gradlew 
+                ./gradlew assemble       
+                ./gradlew publish
+        -   name: Author of triggering commit
+            run: |
+                echo "The author is ${{ github.event.head_commit.author.name }}"
+
+    notify:
+        runs-on: ubuntu-latest
+        needs: test
+        steps:
+        -   name: Email notification
+            uses: cinotify/github-action@main
+            with:
+                to: '${{ secrets.EMAIL }}'
+                subject: '[Pipeline "${{ github.workflow }}" in "${{ github.repository }}"] Workflow ran successfully.'
+                body: 'Workflow "${{ github.workflow }}" (triggered by ${{ github.event_name }}) has been ran successfully by ${{ github.event.head_commit.author.name }} (${{ github.actor }}). The triggering commit was pushed at ${{ github.event.head_commit.timestamp }} (url: ${{ github.event.head_commit.url}}).'
