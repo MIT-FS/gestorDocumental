@@ -1,4 +1,5 @@
 name: Flujo de trabajo para publicar el artefacto (actividad 6)
+
 on:
   push:
     branches: [ sergarlop2 ]
