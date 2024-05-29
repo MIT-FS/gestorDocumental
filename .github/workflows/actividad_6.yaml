@@ -62,7 +62,8 @@ jobs:
           chmod +x gradlew
           ./gradlew publish
       - name: Añadiendo nueva versión
-        run: echo "Nueva versión añadida por: ${{ github.actor }}"
+        run: |
+          echo "Nueva versión añadida por ${{ github.actor }}"
       - name: Enviando correo
         uses: hilarion5/send-mail@v1
         with:
