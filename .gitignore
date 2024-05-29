@@ -1,0 +1,10 @@
+/.gradle/
+gradle.properties
+.project
+.settings
+lib/bin/
+lib/.classpath
+lib/.project
+lib/.settings/
+lib/Quijote.docx
+

@@ -1,0 +1,77 @@
+name: Flujo de trabajo para publicar el artefacto (actividad 6)
+
+on:
+  push:
+    branches: [ sergarlop2 ]
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_LOGIN: ${{ github.actor }}
+      GITHUB_PACKAGES: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Clonando el repositorio y estableciendo el espacio de trabajo
+        uses: actions/checkout@v3
+      - name: Configurando java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '16'
+      - name: Construyendo el código
+        run: |
+          chmod +x gradlew        
+          ./gradlew jar
+  Test:
+    runs-on: ubuntu-latest
+    needs: Build
+    env:
+      GITHUB_LOGIN: ${{ github.actor }}
+      GITHUB_PACKAGES: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Clonando el repositorio y estableciendo el espacio de trabajo
+        uses: actions/checkout@v3
+      - name: Configurando java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '16'
+      - name: Probando el código
+        run: |
+          chmod +x gradlew
+          ./gradlew test
+  Publish:
+    runs-on: ubuntu-latest
+    needs: Test
+    env:
+      GITHUB_LOGIN: ${{ github.actor }}
+      GITHUB_PACKAGES: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Clonando el repositorio y estableciendo el espacio de trabajo
+        uses: actions/checkout@v3
+      - name: Configurando java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '16'
+      - name: Publicando el código
+        run: |
+          chmod +x gradlew
+          ./gradlew publish
+      - name: Añadiendo nueva versión
+        run: |
+          echo "Nueva versión añadida por ${{ github.actor }}"
+      - name: Enviando correo
+        uses: hilarion5/send-mail@v1
+        with:
+          smtp-server: smtp.gmail.com
+          smtp-port: 465
+          smtp-secure: true
+          from-email: ${{ secrets.MI_CORREO }}
+          to-email: ${{ secrets.CORREO_DEST }}
+          username: ${{ secrets.USUARIO }}
+          password: ${{ secrets.PASSWORD }}
+          subject: Nueva publicacion del artefacto
+          body: Se ha publicado una nueva version del artefacto.
