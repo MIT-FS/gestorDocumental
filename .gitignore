@@ -37,3 +37,4 @@ gradle.properties
 *.zip
 *.tar.gz
 *.rar
+lib/Quijote.docx
