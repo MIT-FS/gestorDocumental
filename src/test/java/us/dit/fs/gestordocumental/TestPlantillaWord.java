@@ -49,8 +49,17 @@ class TestPlantillaWord {
 	        assertEquals(wordDocument.convertTextFileToString("subtitulo.txt"), paragraphs.get(1).getText());
 	        assertEquals(wordDocument.convertTextFileToString("parrafo.txt"), paragraphs.get(2).getText());
 	       
+			
+			// Starting at 2 to ignore the title and the subtitle
+			for (int i = 2; i < paragraphs.size(); i++) {
+			XWPFRun paragraph = paragraphs.get(i).getRuns().get(0);
+			// Assert that all the paragraphs are in size 10, using the assertEquals method
+			assertEquals(10, paragraph.getFontSizeAsDouble(), "The font size of at least one paragraph is not 10");
+			}
 	    }
 	}
+
+	
 
 
 

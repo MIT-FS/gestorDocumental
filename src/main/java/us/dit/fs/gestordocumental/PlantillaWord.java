@@ -56,7 +56,8 @@ public class PlantillaWord {
          XWPFRun para1Run = para1.createRun();
          para1Run.setFontFamily("Courier");
          para1Run.setColor("0000FF");
-         para1Run.setFontSize(20);
+         //To pass the test I change this line to 10
+         para1Run.setFontSize(10);
          para1Run.setText(texto);
          para1Run.setBold(true);
     }    
