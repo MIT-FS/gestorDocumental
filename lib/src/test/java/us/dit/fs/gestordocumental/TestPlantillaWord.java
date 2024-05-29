@@ -50,6 +50,19 @@ class TestPlantillaWord {
 	        assertEquals(wordDocument.convertTextFileToString("parrafo.txt"), paragraphs.get(2).getText());
 	       
 	    }
+	    
+	    @Test
+	    public void subtitulosRojos() throws Exception {
+	    	Path msWordPath = Paths.get("Quijote.docx");
+	        logger.info("path ",msWordPath);
+	        XWPFDocument document = new XWPFDocument(Files.newInputStream(msWordPath));
+	        XWPFParagraph subtitulos = document.getParagraphs().get(1);
+	        document.close();
+	        // FF4500 es el color rojo
+	        assertEquals("FF4500", subtitulos.getRuns().get(0).getColor());	 
+	    }
+	    
+	    
 	}
 
 
