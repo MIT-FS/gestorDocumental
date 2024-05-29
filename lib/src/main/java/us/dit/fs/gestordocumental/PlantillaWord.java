@@ -70,7 +70,7 @@ public class PlantillaWord {
          subTitle.setAlignment(ParagraphAlignment.CENTER);         
          XWPFRun subTitleRun = subTitle.createRun();
          subTitleRun.setText(texto);
-         subTitleRun.setColor("00CC44");
+         subTitleRun.setColor("FF4500");
          subTitleRun.setFontFamily("Courier");         
          subTitleRun.setFontSize(12);
          subTitleRun.setTextPosition(20);
