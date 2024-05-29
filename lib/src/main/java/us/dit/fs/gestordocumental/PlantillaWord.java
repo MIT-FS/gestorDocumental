@@ -89,6 +89,9 @@ public class PlantillaWord {
         titleRun.setColor("FF4500");       
         titleRun.setFontFamily("Courier");
         titleRun.setFontSize(12);
+
+        // Setting the title in bold
+        titleRun.setBold(true);
     }   
     /**
      * Método para cerrar y guardar el documento
