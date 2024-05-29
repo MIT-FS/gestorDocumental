@@ -49,6 +49,10 @@ class TestPlantillaWord {
 	        assertEquals(wordDocument.convertTextFileToString("subtitulo.txt"), paragraphs.get(1).getText());
 	        assertEquals(wordDocument.convertTextFileToString("parrafo.txt"), paragraphs.get(2).getText());
 	       
+			// Assert that the title is in bold
+			// The getRuns method returns a list of runs in the paragraph. A run is a sequence of text with the same style.
+			XWPFRun titleRun = paragraphs.get(0).getRuns().get(0);
+			assertTrue(titleRun.isBold(), "The title is not in bold");
 	    }
 	}
 
