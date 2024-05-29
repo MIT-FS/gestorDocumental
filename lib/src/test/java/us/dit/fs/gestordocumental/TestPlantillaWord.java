@@ -59,7 +59,7 @@ class TestPlantillaWord {
 	        document.close();
 	        String sub1 = paragraphs.get(1).getText();
 	       	assertEquals(sub1,"<b>Que trata de la condición y ejercicio del famoso y valiente hidalgo, don Quijote de la Mancha</b>");
-	       
+	      
 	    }
 	    
 	}
