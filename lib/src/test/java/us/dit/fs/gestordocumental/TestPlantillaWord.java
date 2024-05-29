@@ -50,6 +50,18 @@ class TestPlantillaWord {
 	        assertEquals(wordDocument.convertTextFileToString("parrafo.txt"), paragraphs.get(2).getText());
 	       
 	    }
+	    @Test
+	    public void testSubtitulosEnNegrita() throws Exception {
+	        Path msWordPath = Paths.get("subtitulo.txt");
+	        logger.info("path ",msWordPath);
+	        XWPFDocument document = new XWPFDocument(Files.newInputStream(msWordPath));
+	        List<XWPFParagraph> paragraphs = document.getParagraphs();
+	        document.close();
+	        String sub1 = paragraphs.get(1).getText();
+	       	assertEquals(sub1,"<b>Que trata de la condición y ejercicio del famoso y valiente hidalgo, don Quijote de la Mancha</b>");
+	       
+	    }
+	    
 	}
 
 

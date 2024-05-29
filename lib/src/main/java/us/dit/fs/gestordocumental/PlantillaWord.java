@@ -75,6 +75,7 @@ public class PlantillaWord {
          subTitleRun.setFontSize(12);
          subTitleRun.setTextPosition(20);
          subTitleRun.setUnderline(UnderlinePatterns.DOT_DOT_DASH);
+         subTitleRun.setBold(true);
     }    
     
     /**
