@@ -65,8 +65,8 @@ jobs:
       - name: Enviando correo
         uses: hilarion5/send-mail@v1
         with:
-          smtp-server: mail.us.es
-          smtp-port: 587
+          smtp-server: smtp.gmail.com
+          smtp-port: 465
           smtp-secure: true
           from-email: ${{ secrets.MI_CORREO }}
           to-email: ${{ secrets.CORREO_DEST }}
