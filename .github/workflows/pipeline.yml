@@ -1,0 +1,54 @@
+name: Publish to GitHub Packages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Run tests
+      run: ./gradlew test
+
+    - name: Publish to GitHub Packages
+      if: success()
+      run: ./gradlew publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Get current user
+      id: get-user
+      run: echo "::set-output name=user::$(git log -1 --pretty=format:'%an')"
+
+    - name: Print developer info
+      run: echo "The new version is added by ${{ steps.get-user.outputs.user }}"
+
+    - name: Send email notification
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: New Artifact Published
+        body: The new artifact has been published by ${{ steps.get-user.outputs.user }}.
+        to: irm@us.es
+        from: ${{ secrets.EMAIL_USERNAME }}
